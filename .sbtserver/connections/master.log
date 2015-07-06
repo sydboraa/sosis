@@ -1,0 +1,7 @@
+New log file opened at Mon Jul 06 11:50:18 EEST 2015 by 11262@Seyda-Mac
+Taking next connection to: 61856
+New client attempting to connect on port: 61857-61856
+  Address = /192.168.1.25:61856
+This client on port 61857 has uuid d2a4fe9c-6c18-4d51-b04a-0d277e16df46 configName play-fork-run humanReadableName Play Fork Run protocolVersion 1 featureTags Vector()
+Connected Clients: play-fork-run-d2a4fe9c-6c18-4d51-b04a-0d277e16df46
+Taking next connection to: 61856
