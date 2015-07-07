@@ -6,8 +6,27 @@ import play.api.libs.json.{Json, JsValue}
 import play.api.mvc.{BodyParser, Action, Controller}
 import service.CheckInService
 import scala.util.{Failure, Success, Try}
+import scala.concurrent.ExecutionContext.Implicits.global
 /**
  * Created by SB on 06/07/15.
+  POST /api/1/checkIn
+Input:
+{
+  seatId: int
+  restaurantId: int
+  secureRandom: string
+  uuid: string
+  reservationKey: string || null
+}
+Output:
+{
+  reservationId: <random-string>
+  reservationKey: string
+  menuVersion: int
+  orders: {ORDERSOBJ}
+}
+Errors:
+Authantication, NotFound, OldVersion, Unknown
  */
 class CheckInController extends Controller {
 
@@ -38,32 +57,31 @@ class CheckInController extends Controller {
             }
             reservationAsOpt match {
               case (Some(reservation),None) => {
-                Ok(reservation)
+                Ok(Json.toJson(reservation))
               }
               case (Some(reservation),Some(error)) => {
                 logger.error(error.toString)
-                BadRequest(Json.toJson("fail" -> error.toString))
+                BadRequest(Json.toJson(error.toString))
               }
               case (None, Some(error)) => {
                 logger.error(error.toString)
-                BadRequest(Json.toJson("fail" -> error.toString))
+                BadRequest(Json.toJson(error.toString))
               }
               case (None,None) => {
-                BadRequest(Json.toJson("fail" -> "Something is wrong!"))
+                BadRequest(Json.toJson("Something is wrong!"))
               }
             }
           }catch {
             // must be a parse error
             case ex: Exception => {
               logger.error("Missing/Invalid Field" + ex.toString)
-              Ok(Json.obj("fail" -> "Missing/Invalid Field exception!"))
+              BadRequest(Json.toJson("Missing/Invalid Field exception!"))
             }
           }
         }
         case Failure(ex) => {
           logger.error("Missing/Invalid Field" + ex.toString)
-          Ok(Json.obj("fail" -> "Missing/Invalid Field failure!"))
-
+          BadRequest(Json.toJson("Missing/Invalid Field failure!"))
         }
       }
     }
