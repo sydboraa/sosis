@@ -48,6 +48,7 @@ class CheckInController extends Controller {
             val reservationAsOpt: (Option[Reservation],Option[Error]) = reservationKeyAsOpt match {
               //existing table check-in
               case Some(reservationKey) => {
+                //var olan siparişlerin listesi gidecek
                 CheckInService.checkInToRestaurant(seatId,restaurantId,secureRandom,uuid,reservationKey)
               }
               //new check-in
