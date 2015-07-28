@@ -4,7 +4,7 @@ import play.api.Logger
 import play.api.db.DB
 import anorm._
 import model.RestaurantModel.Restaurant
-
+import play.api.Play.current
 /**
  * Created by SB on 08/07/15.
  */

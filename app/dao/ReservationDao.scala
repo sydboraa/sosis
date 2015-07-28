@@ -2,7 +2,7 @@ package dao
 
 import anorm._
 import play.api.db.DB
-
+import play.api.Play.current
 /**
  * Created by SB on 18/07/15.
  */
@@ -14,10 +14,10 @@ object ReservationDao {
     row[String]("data")
   }
 
-  def insertReservation(seatId: Int,restaurantId: Int, reservationCode: String, data: String,dataVersion: String = 1, price :Double = 0.0,isArchived : Boolean = false, isActive : Boolean = true ) = {
+  def insertReservation(seatId: Int,restaurantId: Int, reservationCode: String) = {
     DB.withConnection { implicit c =>
       SQL("insert into Reservation(seatId, restaurantId, reservationCode, data, dataVersion, price, isArchived, isActive) values ({seatId}, {restaurantId}, {reservationCode}, {data}, {dataVersion}, {price}, {isArchived}, {isActive})")
-        .on('seatId -> seatId, 'restaurantId -> restaurantId, 'reservationCode -> reservationCode, 'data -> data, 'dataVersion -> dataVersion, 'price -> price, 'isArchived -> isArchived, 'isActive -> isActive).executeInsert()
+        .on('seatId -> seatId, 'restaurantId -> restaurantId, 'reservationCode -> reservationCode, 'data -> "", 'dataVersion -> 1, 'price -> 0.0, 'isArchived -> false, 'isActive -> true).executeInsert()
     }
   }
 }

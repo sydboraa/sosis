@@ -26,5 +26,5 @@ object MenuModel {
       (JsPath \ "menu").write[String] and
       (JsPath \ "restaurantId").write[Int] and
       (JsPath \ "cDate").write[Date] and
-      (JsPath \ "uDate").write[Date])(Menu.apply _)
+      (JsPath \ "uDate").write[Date])(unlift(Menu.unapply))
 }
