@@ -45,10 +45,9 @@ class CheckInController extends Controller {
             val secureRandom : String = (js \ "secureRandom").as[String]
             val uuid : String = (js \ "uuid").as[String]
             val reservationKeyAsOpt : Option[String] = (js \ "reservationKey").asOpt[String]
-            val reservationAsOpt: (Option[Reservation],Option[Error]) = reservationKeyAsOpt match {
+            val reservationIsPossibleAsOpt: Boolean = reservationKeyAsOpt match {
               //existing table check-in
               case Some(reservationKey) => {
-                //var olan siparişlerin listesi gidecek
                 CheckInService.checkInToRestaurant(seatId,restaurantId,secureRandom,uuid,reservationKey)
               }
               //new check-in
@@ -56,21 +55,9 @@ class CheckInController extends Controller {
                 CheckInService.checkInToRestaurant(seatId,restaurantId,secureRandom,uuid,"0")
               }
             }
-            reservationAsOpt match {
-              case (Some(reservation),None) => {
-                Ok(Json.toJson(reservation))
-              }
-              case (Some(reservation),Some(error)) => {
-                logger.error(error.toString)
-                BadRequest(Json.toJson(error.toString))
-              }
-              case (None, Some(error)) => {
-                logger.error(error.toString)
-                BadRequest(Json.toJson(error.toString))
-              }
-              case (None,None) => {
-                BadRequest(Json.toJson("Something is wrong!"))
-              }
+            reservationIsPossibleAsOpt match {
+              case true => Ok(Json.toJson("success"))
+              case false => BadRequest(Json.toJson("failed"))
             }
           }catch {
             // must be a parse error
